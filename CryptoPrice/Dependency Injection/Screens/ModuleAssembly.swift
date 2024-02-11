@@ -9,13 +9,16 @@ import Foundation
 import Swinject
 
 final class ModuleAssembly {
+
     static let all: [Assembly] = [
         HomeScreenAssembly(),
         CoinDetailAssembly()
     ]
+
 }
 
 final class HomeScreenAssembly: Assembly {
+
     func assemble(container: Container) {
 
         container.register(FetchCryptoLogoUseCaseProtocol.self) { resolver in
@@ -47,6 +50,7 @@ final class HomeScreenAssembly: Assembly {
 }
 
 final class CoinDetailAssembly: Assembly {
+
     func assemble(container: Container) {
 
         container.register(CoinDetailViewModel.self) { resolver, coin in

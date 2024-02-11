@@ -47,6 +47,13 @@ private extension HomeCryptoListViewModel {
                 }
             }
             .assign(to: &$state)
+
+        Publishers.Merge(
+            didTapRetry,
+            refreshPrices
+        )
+            .map { .loading }
+            .assign(to: &$state)
     }
 
     func makeInitialPriceFetchResult() -> AnyPublisher<DomainResult<[CoinRowViewModel]>, Never> {

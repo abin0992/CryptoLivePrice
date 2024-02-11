@@ -12,15 +12,17 @@ import Swinject
 final class HomeCoordinator: Coordinator {
 
     var rootViewController: UINavigationController = UINavigationController()
-
-    private lazy var container = DependencyManager.shared.container
-    private lazy var resolverEnvironment = ResolverEnvironment(container: container)
-
-    private let resolver: Resolver
     private var cancellables = Set<AnyCancellable>()
 
-    init(resolver: Resolver) {
+    private let resolver: Resolver
+    private let resolverEnvironment: ResolverEnvironment
+
+    init(
+        resolver: Resolver,
+        resolverEnvironment: ResolverEnvironment
+    ) {
         self.resolver = resolver
+        self.resolverEnvironment = resolverEnvironment
     }
 
     func start() {
@@ -30,23 +32,29 @@ final class HomeCoordinator: Coordinator {
 }
 
 private extension HomeCoordinator {
+
     func displayHomeView() {
+
         guard let homeViewModel = resolver.resolve(HomeCryptoListViewModel.self) else {
             return
         }
+
         homeViewModel.output
             .receive(on: DispatchQueue.main)
             .sink { [weak self] coin in
                 self?.navigateToDetailScreen(coin: coin)
             }
             .store(in: &cancellables)
+
         let homeView = HomeCryptoListView(viewModel: homeViewModel)
             .environmentObject(resolverEnvironment)
         let homeViewController = UIHostingController(rootView: homeView)
+
         rootViewController.setViewControllers([homeViewController], animated: false)
     }
 
     func navigateToDetailScreen(coin: CoinRowViewModel) {
+
         guard let coinDetailViewModel = resolver.resolve(
             CoinDetailViewModel.self,
             argument: coin
@@ -54,19 +62,11 @@ private extension HomeCoordinator {
             return
         }
 
-        
-//        ResolverEnvironment(
-//            container: DependencyManager.shared.container
-//        )
-        
         let coinDetailView = CoinDetailView(viewModel: coinDetailViewModel)
             .environmentObject(resolverEnvironment)
-        
+        let detailViewController = UIHostingController(rootView: coinDetailView)
 
-        let detailViewController = UIHostingController(
-            rootView: coinDetailView
-        )
         rootViewController.pushViewController(detailViewController, animated: true)
-        
+
     }
 }

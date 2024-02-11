@@ -71,6 +71,7 @@
 		16E3F13F2B792A4600ACB6B8 /* CryptoServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E3F1332B792A4600ACB6B8 /* CryptoServiceTests.swift */; };
 		16E3F1402B792A4600ACB6B8 /* HomeCryptoListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E3F1352B792A4600ACB6B8 /* HomeCryptoListViewModelTests.swift */; };
 		16E3F1412B792A4600ACB6B8 /* FetchCryptoPricesUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E3F1372B792A4600ACB6B8 /* FetchCryptoPricesUseCaseTests.swift */; };
+		16E3F1432B79467700ACB6B8 /* MapDataToStatisticsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E3F1422B79467700ACB6B8 /* MapDataToStatisticsUseCase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -158,6 +159,7 @@
 		16E3F1332B792A4600ACB6B8 /* CryptoServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoServiceTests.swift; sourceTree = "<group>"; };
 		16E3F1352B792A4600ACB6B8 /* HomeCryptoListViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeCryptoListViewModelTests.swift; sourceTree = "<group>"; };
 		16E3F1372B792A4600ACB6B8 /* FetchCryptoPricesUseCaseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchCryptoPricesUseCaseTests.swift; sourceTree = "<group>"; };
+		16E3F1422B79467700ACB6B8 /* MapDataToStatisticsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataToStatisticsUseCase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -395,6 +397,7 @@
 			isa = PBXGroup;
 			children = (
 				16E3F0DC2B791DF400ACB6B8 /* FetchCrypoDetailUseCase.swift */,
+				16E3F1422B79467700ACB6B8 /* MapDataToStatisticsUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -773,6 +776,7 @@
 			files = (
 				16E3F0D12B791DEF00ACB6B8 /* CoinModel.swift in Sources */,
 				16E3F0ED2B791DF400ACB6B8 /* FetchCrypoDetailUseCase.swift in Sources */,
+				16E3F1432B79467700ACB6B8 /* MapDataToStatisticsUseCase.swift in Sources */,
 				16E3F0FC2B791DFA00ACB6B8 /* HTTPClient.swift in Sources */,
 				16E3F0F12B791DF400ACB6B8 /* CryptoLogoAndSymbolView.swift in Sources */,
 				16E3F1182B791E0D00ACB6B8 /* LocalFileManager.swift in Sources */,

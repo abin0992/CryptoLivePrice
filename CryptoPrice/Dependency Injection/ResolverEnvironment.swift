@@ -9,13 +9,9 @@ import Foundation
 import Swinject
 
 final class ResolverEnvironment: ObservableObject {
-    let container: Container
+    lazy var container = DependencyManager.shared.container
 
-    init(container: Container) {
-        self.container = container
-    }
-
-    func resolve<Service>(_ serviceType: Service.Type) -> Service? {
+    private func resolve<Service>(_ serviceType: Service.Type) -> Service? {
         container.resolve(serviceType)
     }
 }

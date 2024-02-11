@@ -15,6 +15,7 @@ protocol HTTPClientProtocol {
 final class HTTPClient: HTTPClientProtocol {
 
     private let logger: NetworkErrorLogger = DefaultNetworkErrorLogger()
+
     private let session: URLSession
 
     init(session: URLSession = URLSession.shared) {

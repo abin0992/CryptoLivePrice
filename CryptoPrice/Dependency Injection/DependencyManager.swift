@@ -19,7 +19,7 @@ final class DependencyManager {
         registerDependencies()
     }
 
-    func registerDependencies() {
+    private func registerDependencies() {
         let serviceAssemblies = ServiceAssembly.all
         serviceAssemblies.forEach { $0.assemble(container: container) }
 

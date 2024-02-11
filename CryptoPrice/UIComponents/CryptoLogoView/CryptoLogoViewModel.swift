@@ -14,10 +14,11 @@ final class CryptoLogoViewModel: ObservableObject {
     @Published var image: UIImage?
     @Published var isLoading: Bool = false
 
+    private var cancellables = Set<AnyCancellable>()
+
     private let coinId: String
     private let coinImageUrl: String
     private let fetchCryptoLogoUseCase: FetchCryptoLogoUseCaseProtocol
-    private var cancellables = Set<AnyCancellable>()
 
     init(
         coinId: String,

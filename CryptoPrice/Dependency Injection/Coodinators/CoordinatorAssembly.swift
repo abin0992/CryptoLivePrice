@@ -9,21 +9,17 @@ import Foundation
 import Swinject
 
 final class CoordinatorAssembly {
+
     static let all: [Assembly] = [
         AppCoordinatorAssembly(),
         HomeCoordinatorAssembly()
     ]
+
 }
 
 final class AppCoordinatorAssembly: Assembly {
-    func assemble(container: Container) {
-//        container.register(AppCoordinator.self) { resolver, path in
-//            AppCoordinator(
-//                resolver: resolver,
-//                path: path
-//            )
-//        }
 
+    func assemble(container: Container) {
         container.register(ApplicationCoordinator.self) { resolver, window in
             ApplicationCoordinator(
                 resolver: resolver,
@@ -31,14 +27,18 @@ final class AppCoordinatorAssembly: Assembly {
             )
         }
     }
+
 }
 
 final class HomeCoordinatorAssembly: Assembly {
+
     func assemble(container: Container) {
-        container.register(HomeCoordinator.self) { resolver in
+        container.register(HomeCoordinator.self) { resolver, resolverEnvironment in
             HomeCoordinator(
-                resolver: resolver
+                resolver: resolver,
+                resolverEnvironment: resolverEnvironment
             )
         }
     }
+
 }

@@ -15,9 +15,10 @@ protocol CryptoFetchable {
 
 final class CryptoService: CryptoFetchable {
 
-    lazy var decoder = JSONDecoder()
+    private lazy var decoder = JSONDecoder()
 
     private let config: CryptoNetworkConfigurable = CryptoUrlConfig.shared
+
     private let httpClient: HTTPClientProtocol
 
     init(httpClient: HTTPClientProtocol) {

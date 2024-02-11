@@ -17,6 +17,7 @@ final class FetchCryptoLogoUseCase: FetchCryptoLogoUseCaseProtocol {
 
     private let fileManager = LocalFileManager.instance
     private let folderName = "crypto_logos"
+
     private let httpClient: HTTPClientProtocol
 
     init(httpClient: HTTPClientProtocol) {

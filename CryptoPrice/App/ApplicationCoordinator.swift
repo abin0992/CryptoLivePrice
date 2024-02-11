@@ -12,11 +12,10 @@ import UIKit
 
 final class ApplicationCoordinator: Coordinator {
 
-    private let window: UIWindow
-    private let resolver: Resolver
     private var childCoordinators = [Coordinator]()
 
-    var subscriptions = Set<AnyCancellable>()
+    private let resolver: Resolver
+    private let window: UIWindow
 
     init(
         resolver: Resolver,
@@ -25,13 +24,20 @@ final class ApplicationCoordinator: Coordinator {
         self.resolver = resolver
         self.window = window
     }
-    
+
     func start() {
-        let homeCoordinator = resolver.resolve(HomeCoordinator.self)!
+        let resolverEnvironment = ResolverEnvironment()
+
+        guard let homeCoordinator = resolver.resolve(
+            HomeCoordinator.self,
+            argument: resolverEnvironment
+        ) else {
+            return
+        }
+
         homeCoordinator.start()
 
         childCoordinators = [homeCoordinator]
         window.rootViewController = homeCoordinator.rootViewController
-
     }
 }

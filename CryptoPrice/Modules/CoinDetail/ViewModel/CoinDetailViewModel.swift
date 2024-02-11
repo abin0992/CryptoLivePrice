@@ -19,8 +19,11 @@ final class CoinDetailViewModel: ObservableObject {
     @Published var coin: CoinRowViewModel
 
     private var cancellables = Set<AnyCancellable>()
+    private let mapDataToStatisticsUseCase = MapDataToStatisticsUseCase()
+
     private lazy var fetchCryptoDetailResult = makeCryptoDetailFetchResult()
         .share()
+    private lazy var statisticsResult = makeStatisticsResult()
 
     let didTapRetry = PassthroughSubject<Void, Never>()
 
@@ -40,15 +43,16 @@ final class CoinDetailViewModel: ObservableObject {
 private extension CoinDetailViewModel {
 
     func setUpBindings() {
-        fetchCryptoDetailResult
-            .compactMap { $0.value }
-            .combineLatest($coin)
-            .map(mapDataToStatistics)
-            .sink { [weak self] returnedArrays in
-                self?.overviewStatistics = returnedArrays.overview
-                self?.additionalStatistics = returnedArrays.additional
-            }
-            .store(in: &cancellables)
+
+        statisticsResult
+            .map { $0.overview }
+            .receive(on: RunLoop.main)
+            .assign(to: &$overviewStatistics)
+
+        statisticsResult
+            .map { $0.additional }
+            .receive(on: RunLoop.main)
+            .assign(to: &$additionalStatistics)
 
         fetchCryptoDetailResult
             .compactMap { $0.value }
@@ -59,94 +63,24 @@ private extension CoinDetailViewModel {
             }
             .store(in: &cancellables)
     }
-
-    func makeCryptoDetailFetchResult() -> AnyPublisher<DomainResult<CoinDetailModel>, Never> {
-        fetchCrypoDetailUseCase.execute(coinId: coin.id)
-    }
 }
 
 private extension CoinDetailViewModel {
 
-    func mapDataToStatistics(
-        coinDetailModel: CoinDetailModel,
-        coinModel: CoinRowViewModel
-    ) -> (overview: [StatisticModel], additional: [StatisticModel]) {
-        let overviewArray = createOverviewArray(coinModel: coinModel)
-        let additionalArray = createAdditionalArray(
-            coinDetailModel: coinDetailModel,
-            coinModel: coinModel
-        )
-        return (overviewArray, additionalArray)
+    func makeCryptoDetailFetchResult() -> AnyPublisher<DomainResult<CoinDetailModel>, Never> {
+        fetchCrypoDetailUseCase.execute(coinId: coin.id)
     }
 
-    func createOverviewArray(coinModel: CoinRowViewModel) -> [StatisticModel] {
-        let price = coinModel.currentPrice
-        let pricePercentChange = coinModel.priceChangePercentage24HValue
-        let priceStat = StatisticModel(
-            title: "Current Price",
-            value: price,
-            percentageChange: pricePercentChange
-        )
-
-        let marketCap = "$" + coinModel.marketCap
-        let marketCapPercentChange = coinModel.marketCapChangePercentage24H
-        let marketCapStat = StatisticModel(
-            title: "Market Capitalization",
-            value: marketCap,
-            percentageChange: marketCapPercentChange
-        )
-
-        let rank = "\(coinModel.rank)"
-        let rankStat = StatisticModel(title: "Rank", value: rank)
-
-        let volume = "$" + coinModel.totalVolume
-        let volumeStat = StatisticModel(title: "Volume", value: volume)
-
-        let overviewArray: [StatisticModel] = [
-            priceStat,
-            marketCapStat,
-            rankStat,
-            volumeStat
-        ]
-        return overviewArray
-    }
-
-    func createAdditionalArray(
-        coinDetailModel: CoinDetailModel?,
-        coinModel: CoinRowViewModel
-    ) -> [StatisticModel] {
-
-        let highStat = StatisticModel(title: "24h High", value: coinModel.high24H)
-
-        let lowStat = StatisticModel(title: "24h Low", value: coinModel.low24H)
-
-        let priceChangeStat = StatisticModel(
-            title: "24h Price Change",
-            value: coinModel.priceChange24H,
-            percentageChange: coinModel.priceChangePercentage24HValue
-        )
-
-        let marketCapChangeStat = StatisticModel(
-            title: "24h Market Cap Change",
-            value: "$" + coinModel.marketCapChange24H,
-            percentageChange: coinModel.marketCapChangePercentage24H
-        )
-
-        let blockTime = coinDetailModel?.blockTimeInMinutes ?? 0
-        let blockTimeString = blockTime == 0 ? "n/a" : "\(blockTime)"
-        let blockStat = StatisticModel(title: "Block Time", value: blockTimeString)
-
-        let hashing = coinDetailModel?.hashingAlgorithm ?? "n/a"
-        let hashingStat = StatisticModel(title: "Hashing Algorithm", value: hashing)
-
-        let additionalArray: [StatisticModel] = [
-            highStat,
-            lowStat,
-            priceChangeStat,
-            marketCapChangeStat,
-            blockStat,
-            hashingStat
-        ]
-        return additionalArray
+    func makeStatisticsResult() -> AnyPublisher<(overview: [StatisticModel], additional: [StatisticModel]), Never> {
+        fetchCryptoDetailResult
+            .compactMap { $0.value }
+            .combineLatest($coin)
+            .flatMap { [mapDataToStatisticsUseCase] coinDetail, coin -> AnyPublisher<(overview: [StatisticModel], additional: [StatisticModel]), Never> in
+                mapDataToStatisticsUseCase.execute(
+                    coinDetailModel: coinDetail,
+                    coinModel: coin
+                )
+            }
+            .eraseToAnyPublisher()
     }
 }

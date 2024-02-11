@@ -9,15 +9,19 @@ import Foundation
 import Swinject
 
 final class NetworkAssembly {
+
     static let all: [Assembly] = [
         HTTPAssembly()
     ]
+
 }
 
 final class HTTPAssembly: Assembly {
+
     func assemble(container: Container) {
         container.register(HTTPClientProtocol.self) { _ in
             HTTPClient()
         }
     }
+
 }

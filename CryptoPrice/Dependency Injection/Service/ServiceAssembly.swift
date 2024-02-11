@@ -9,12 +9,15 @@ import Foundation
 import Swinject
 
 final class ServiceAssembly {
+
     static let all: [Assembly] = [
         CryptoServiceAssembly()
     ]
+
 }
 
 final class CryptoServiceAssembly: Assembly {
+
     func assemble(container: Container) {
         container.register(CryptoFetchable.self) { resolver in
             CryptoService(
@@ -22,4 +25,5 @@ final class CryptoServiceAssembly: Assembly {
             )
         }
     }
+
 }
