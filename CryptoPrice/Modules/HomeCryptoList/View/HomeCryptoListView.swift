@@ -35,7 +35,7 @@ struct HomeCryptoListView: View {
                 VStack {}
             }
         }
-        .navigationTitle("Live prices")
+        .navigationBarTitle("Live crypto prices")
         .navigationBarBackButtonHidden(true)
     }
 }

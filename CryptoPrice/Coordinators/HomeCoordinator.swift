@@ -50,6 +50,7 @@ private extension HomeCoordinator {
             .environmentObject(resolverEnvironment)
         let homeViewController = UIHostingController(rootView: homeView)
 
+        rootViewController.navigationBar.prefersLargeTitles = true
         rootViewController.setViewControllers([homeViewController], animated: false)
     }
 
