@@ -1,3 +1,4 @@
+[![Build](https://github.com/abin0992/CryptoLivePrice/actions/workflows/ci.yml/badge.svg)](https://github.com/abin0992/CryptoLivePrice/actions/workflows/ci.yml) 
 
 # Crypto prices
 
@@ -12,6 +13,7 @@ The view model, the networking layer and models and business logic for this scre
 - Pull to refresh the list
 - Error handling with retry
 - While selecting a crypto currency, the detail screeen is displayed
+- Continuous Integration using github actions
 
 
 
