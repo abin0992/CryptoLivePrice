@@ -2,12 +2,12 @@
 
 # Crypto prices
 
-The app loads latest crypto currency prices [from Coin Gecko API](https://www.coingecko.com/en/api)
+The app loads latest crypto currency prices from [Coin Gecko API](https://www.coingecko.com/en/api)
 
 
 ## Features
 
-For now only list screen is covered by tests 
+For now, only list screen is covered by tests 
 The view model, the networking layer and models and business logic for this screen is completedly covered by unit tests
 - The home page loads list of crypto currency prices in USD, lists in order of market capitilisation
 - Pull to refresh the list
