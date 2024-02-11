@@ -31,42 +31,45 @@ final class HTTPClient: HTTPClientProtocol {
         request.httpMethod = method.rawValue
         request.httpBody = body
 
-        logger.log(request: request)
-
         return session.dataTaskPublisher(for: request)
-            .tryMap { [logger] result -> Data in
+           .tryMap { [weak self] result -> Data in
+               guard let self = self else { throw URLError(.badServerResponse) }
+               guard let httpResponse = result.response as? HTTPURLResponse else {
+                   throw URLError(.cannotParseResponse)
+               }
 
-                guard
-                    let httpResponse = result.response as? HTTPURLResponse,
-                    200..<300 ~= httpResponse.statusCode
-                else {
-                    throw ClientError.badURLResponse(url: url)
-                }
+               #if DEBUG
+               let logError: Error? = 200..<300 ~= httpResponse.statusCode ? nil : URLError(.badServerResponse)
 
-                logger.log(responseData: result.data, response: httpResponse)
+               let prettyPrintedJSON = self.prettyPrintedJSON(from: result.data)
+               self.logger.log(
+                   request: request,
+                   data: prettyPrintedJSON.data(using: .utf8),
+                   response: httpResponse,
+                   error: logError
+               )
+               #endif
 
-                #if DEBUG
-                    do {
-                        let jsonObject = try JSONSerialization.jsonObject(
-                            with: result.data,
-                            options: []
-                        )
-                        let prettyJsonData = try JSONSerialization.data(
-                            withJSONObject: jsonObject,
-                            options: [.prettyPrinted]
-                        )
-                        if let prettyPrintedJson = String(data: prettyJsonData, encoding: .utf8) {
-                            DLog("Response JSON for URL \(url.absoluteString): \(prettyPrintedJson)")
-                        }
-                    } catch {
-                        if let jsonStr = String(data: result.data, encoding: .utf8) {
-                            DLog("Response JSON for URL \(url.absoluteString): \(jsonStr)")
-                        }
-                    }
-                #endif
-                return result.data
-            }
+               // Validate the response status code
+               guard 200..<300 ~= httpResponse.statusCode else {
+                   throw URLError(.badServerResponse)
+               }
+
+               return result.data
+           }
+           .catch { error -> AnyPublisher<Data, Error> in
+               DLog(error.localizedDescription)
+               return Fail(error: error).eraseToAnyPublisher()
+           }
             .retry(3)
             .eraseToAnyPublisher()
+    }
+
+    private func prettyPrintedJSON(from data: Data) -> String {
+        guard let object = try? JSONSerialization.jsonObject(with: data),
+              let prettyData = try? JSONSerialization.data(withJSONObject: object, options: .prettyPrinted) else {
+            return String(decoding: data, as: UTF8.self) // Return original data string if not JSON
+        }
+        return String(decoding: prettyData, as: UTF8.self)
     }
 }
