@@ -21,8 +21,8 @@ final class MapDataToStatisticsUseCase {
             .eraseToAnyPublisher()
 
         return Publishers.CombineLatest(
-            overviewPublisher,
-            additionalPublisher
+                overviewPublisher,
+                additionalPublisher
             )
             .map { (overview: $0, additional: $1) }
             .eraseToAnyPublisher()
