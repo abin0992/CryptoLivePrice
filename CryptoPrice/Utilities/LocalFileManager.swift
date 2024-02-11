@@ -51,7 +51,11 @@ private extension LocalFileManager {
 
         if !FileManager.default.fileExists(atPath: url.path) {
             do {
-                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+                try FileManager.default.createDirectory(
+                    at: url,
+                    withIntermediateDirectories: true,
+                    attributes: nil
+                )
             } catch let error {
                 print("Error creating directory. FolderName: \(folderName). \(error)")
             }

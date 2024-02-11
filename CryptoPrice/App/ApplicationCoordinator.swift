@@ -6,11 +6,11 @@
 //
 
 import Combine
-import Swinject
 import SwiftUI
+import Swinject
 import UIKit
 
-class ApplicationCoordinator: Coordinator {
+final class ApplicationCoordinator: Coordinator {
 
     private let window: UIWindow
     private let resolver: Resolver
@@ -26,14 +26,12 @@ class ApplicationCoordinator: Coordinator {
         self.window = window
     }
     
-    
     func start() {
         let homeCoordinator = resolver.resolve(HomeCoordinator.self)!
         homeCoordinator.start()
-        
+
         childCoordinators = [homeCoordinator]
         window.rootViewController = homeCoordinator.rootViewController
 
     }
 }
-
