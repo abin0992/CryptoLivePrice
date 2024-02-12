@@ -45,3 +45,5 @@ The view model, the networking layer and models and business logic for this scre
 
 ![Simulator Screen Recording - iPhone 15 Pro - 2024-02-11 at 19 02 29](https://github.com/abin0992/CryptoLivePrice/assets/10430402/ece63a6f-a98f-4d2e-ab69-e8eb4c76a33a)
 
+App Icon sourced from [here](https://www.cleanpng.com/png-bitcoin-cash-cryptocurrency-bitcoin-sv-digital-wal-7067367/), Image may be subject to copyright
+
