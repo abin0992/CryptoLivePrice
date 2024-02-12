@@ -28,7 +28,7 @@ The view model, the networking layer and models and business logic for this scre
 ## Dependencies
 
 #### The following 3rd party are added using Swift Package Manager
-- Swinject - For dependency injection
+- [Swinject - For dependency injection](https://github.com/Swinject/Swinject)
   
 ## To do
 
